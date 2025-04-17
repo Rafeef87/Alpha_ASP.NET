@@ -676,8 +676,10 @@ a {
     border-radius: var(--border-radius);
 }
 
+.actions {
+    cursor: pointer;
+}
 /* lists */
-
 .client-list {
     height: 100%;
 }
@@ -1253,10 +1255,12 @@ image-previewer.square {
         justify-content: space-between;
         align-items: center;
     }
-
-#addClientModal .modal-content {
-    width: 550px;
+#addClientModal {
+    display: none;
 }
+    #addClientModal .modal-content {
+        width: 550px;
+    }
 
 #editClientModal {
     display: none;

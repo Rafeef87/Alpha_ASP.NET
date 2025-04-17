@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace Business.Models;
+namespace Domain.Models;
 
 public class EditClientForm
 {

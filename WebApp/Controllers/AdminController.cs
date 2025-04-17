@@ -1,5 +1,5 @@
 ﻿
-using Business.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers;

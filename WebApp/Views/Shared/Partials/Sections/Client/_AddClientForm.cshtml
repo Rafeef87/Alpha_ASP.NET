@@ -1,7 +1,7 @@
 ﻿
 @model AddClientForm
 
-<div id="addclientModal" class="modal">
+<div id="addClientModal" class="modal">
     <div class="modal-content">
 
         <div class="modal-header">
@@ -38,8 +38,13 @@
                     <span asp-validation-for="Phone"></span>
                 </div>
             </div>
-
-            <button class="btn btn-submit btn-blue">Create</button>
+            @if (!string.IsNullOrEmpty(ViewBag?.ErrorMessage))
+            {
+                <div class="form-alert">
+                    @ViewBag?.ErrorMessage
+                </div>
+            }
+            <button type="submit" class="btn btn-submit btn-blue">Create</button>
         </form>
 
     </div>
