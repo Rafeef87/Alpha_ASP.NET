@@ -1,0 +1,46 @@
+﻿@model EditClientForm
+
+<div id="editClientModal" class="modal">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h3>Edit Client</h3>
+            <button type="button" class="btn-close" data-close="true"></button>
+        </div>
+
+        <form novalidate method="post" asp-action="EditClient" asp-controller="Admin">
+            <div class="form-group">
+                <label asp-for="ClientName"></label>
+                <div class="field-group">
+                    <input asp-for="ClientName" />
+                    <span asp-validation-for="ClientName"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <div class="field-group">
+                    <input asp-for="Email" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="location"></label>
+                <div class="field-group">
+                    <input asp-for="location" />
+                    <span asp-validation-for="location"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone"></label>
+                <div class="field-group">
+                    <input asp-for="Phone" />
+                    <span asp-validation-for="Phone"></span>
+                </div>
+            </div>
+
+            <button class="btn btn-submit btn-blue">Create</button>
+        </form>
+
+    </div>
+
+</div>
