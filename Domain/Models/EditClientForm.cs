@@ -1,10 +1,15 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Domain.Models;
 
 public class EditClientForm
 {
+    [Display(Name = "Client Image", Prompt = "Select an image")]
+    [DataType(DataType.Upload)]
+    public IFormFile? ClientImage { get; set; }
+
     [Display(Name = "Client Name", Prompt = "Enter client name")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Required")]
