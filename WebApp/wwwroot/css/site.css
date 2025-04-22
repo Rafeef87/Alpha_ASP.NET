@@ -632,8 +632,11 @@ a {
     padding: 1.2rem 1rem 1.2rem 1.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    display: none;
 }
-
+    .dropdown.show {
+        display: block;
+    }
     .dropdown .dropdown-header {
         display: flex;
         justify-content: space-between;

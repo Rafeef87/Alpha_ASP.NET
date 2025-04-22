@@ -4,8 +4,10 @@
     <i class="fa-solid fa-magnifying-glass"></i>
     <input type="search" class="form-search-input" placeholder="Search anything... " />
 </form>
+
+<!--  NOTIFICATION DROPDOWN -->
 <div id="notification-container">
-    <button type="button" data-type="dropdown" data-target="#notifications-dropdown" class="btn-notification">
+    <button type="button" data-target="#notification-dropdown" class="btn-notification">
         <i class="dot dot-red fa-solid fa-circle"></i>
         <i class="fa-duotone fa-solid fa-bell" style="--fa-primary-opacity: 0.4; --fa-secondary-opacity: 1;"></i>
     </button>
@@ -17,23 +19,22 @@
         </div>
         <div class="divider"></div>
         <div class="notifications" data-notification-type="user">
-            <div class="user-image">
-                <img src="~/images/Admin/Joakim.svg" alt="User Image" />
-            </div>
-            <span class="message">Rafeef sigend in.</span>
-            <span class="time">10 min ago</span>
-            <button class="btn-remove"></button>
-        </div>
-        <div class="notification" data-notification-type="user">
-            <div class="user-image">
-                <img src="~/images/Admin/Contacts.svg" alt="User Image" />
-            </div>
-            <span class="message">Rafeef sigend in.</span>
-            <span class="time">10 min ago</span>
-            <button class="btn-remove"></button>
+            @foreach (var notification in ViewBag.Notifications ?? new List<Notification>())
+            {
+                <div class="notification" data-notification-type="@notification.Type" data-notification-id="@notification.Id">
+                    <div class="user-image">
+                        <img src="~/images/Admin/Contacts.svg" alt="User Image" />
+                    </div>
+                    <span class="message">@notification.Message</span>
+                    <span class="time">@notification.Time.ToShortTimeString()</span>
+                    <button class="btn-remove"></button>
+                </div>
+            }
         </div>
     </div>
 </div>
+
+<!--  ACCOUNT DROPDOWN -->
 <div id="account-container">
     <button type="button" data-target="#account-dropdown" class="btn-account">
         <img src="~/images/Admin/Contacts.svg" alt="User Image" />
@@ -66,9 +67,5 @@
                 </a>
             </nav>
         </div>
-
-
     </div>
 </div>
-
-

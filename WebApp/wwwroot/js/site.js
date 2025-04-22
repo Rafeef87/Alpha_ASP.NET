@@ -106,3 +106,42 @@ document.addEventListener("click", function (event) {
         menu.style.display = "none";
     }
 });
+
+
+// Notification and account Dropdown
+
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownButtons = document.querySelectorAll('[data-target]');
+
+    dropdownButtons.forEach(button => {
+        const targetSelector = button.getAttribute('data-target');
+        const dropdown = document.querySelector(targetSelector);
+
+        if (!dropdown) return;
+
+        button.addEventListener('click', function (event) {
+            event.stopPropagation();
+
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('show');
+            });
+
+            // Toggle current dropdown
+            dropdown.classList.toggle('show');
+        });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+    });
+
+    // Optional: Escape key closes dropdown
+    document.addEventListener('keydown', function (e) {
+        if (e.key === "Escape") {
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+        }
+    });
+});
+
