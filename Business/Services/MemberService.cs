@@ -6,7 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services;
 
-public class MemberService(AppDbContext context)
+public interface IMemberService
+{
+    Task<List<MemberViewModel>> GetAvailableMembersAsync(ProjectEntity project);
+}
+
+public class MemberService(AppDbContext context) : IMemberService
 {
     private readonly AppDbContext _context = context;
 

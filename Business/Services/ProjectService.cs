@@ -8,7 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Business.Services;
 
-public class ProjectService(AppDbContext context, UserManager<UserEntity> userManager, ProjectMapper projectMapper, MemberService memberService)
+public interface IProjectService
+{
+    Task<ProjectViewModel> CreateProjectAsync(ProjectViewModel model);
+    Task DeleteProjectAsync(int id);
+    Task<ProjectListViewModel> GetAllProjectsAsync();
+    Task<ProjectViewModel> GetProjectByIdAsync(int id);
+    Task UpdateProjectAsync(ProjectViewModel model);
+}
+
+public class ProjectService(AppDbContext context, UserManager<UserEntity> userManager, ProjectMapper projectMapper, MemberService memberService) : IProjectService
 {
     private readonly AppDbContext _context = context;
     private readonly UserManager<UserEntity> _userManager = userManager;
@@ -20,17 +29,17 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
         var projects = await _context.Projects.Include(p => p.projectMembers)
             .ThenInclude(pm => pm.User)
             .ToListAsync();
-       
-         return new ProjectListViewModel
-            {
-             AllProjects = await _projectMapper.MapToViewModels(projects),
-             StartedProjects = await _projectMapper.MapToViewModels(
-                projects.Where(p => p.Status == "started").ToList()
-            ),
-             CompletedProjects = await _projectMapper.MapToViewModels(
-                projects.Where(p => p.Status == "completed").ToList()
-            )
-         };
+
+        return new ProjectListViewModel
+        {
+            AllProjects = await _projectMapper.MapToViewModels(projects),
+            StartedProjects = await _projectMapper.MapToViewModels(
+               projects.Where(p => p.Status == "started").ToList()
+           ),
+            CompletedProjects = await _projectMapper.MapToViewModels(
+               projects.Where(p => p.Status == "completed").ToList()
+           )
+        };
 
     }
 
@@ -131,7 +140,7 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
             await _context.Members.AddAsync(newProjectMember);
         }
         await _context.SaveChangesAsync();
-   
+
     }
     public async Task DeleteProjectAsync(int id)
     {
@@ -148,9 +157,9 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
         // Remove project
         _context.Projects.Remove(project);
         await _context.SaveChangesAsync();
-        
+
     }
 
-   
+
 
 }
