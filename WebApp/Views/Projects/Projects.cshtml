@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ProjectListViewModel
+
+@{
     ViewData["Title"] = "Projects";
 }
 <section id="projects">
@@ -6,4 +8,7 @@
         <h2>Projects</h2>
         <button type="button" class="btn btn-add btn-blue">Add Project</button>
     </header>
+    
+     <partial name="Partials/Sections/Projects/_projectList" />
+  
 </section>

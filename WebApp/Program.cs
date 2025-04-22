@@ -1,4 +1,5 @@
 using Business.Helpers;
+using Business.Services;
 using Data.Contexts;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -32,6 +33,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
+builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ProjectMapper>();
 
 var app = builder.Build();

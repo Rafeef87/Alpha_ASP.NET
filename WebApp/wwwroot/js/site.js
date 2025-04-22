@@ -93,7 +93,7 @@ async function processImage(file, imagePreview, previewer, previewSize = 150) {
 
 // user-menu
 function toggleMenu() {
-    const menu = document.getElementById("dropdown");
+    const menu = document.getElementById("card");
     menu.style.display = (menu.style.display === "block") ? "none" : "block";
 }
 

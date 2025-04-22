@@ -20,14 +20,16 @@
             @await Html.PartialAsync("Partials/Components/_NavLinks")
         </div>
 
-        <div class="top"></div>
+        <div class="top">
+            @await Html.PartialAsync("_HeaderPartial")
+        </div>
 
         <div class="main">
             @RenderBody()
         </div>
 
-
-    </div>
+     </div>
+  
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

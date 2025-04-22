@@ -885,12 +885,12 @@ form {
     display: block;
 }
 
-form .search-form {
+form.search-form {
     position: relative;
 }
 
 .form-search-input {
-    position: relative;
+    position: absolute;
     width: 100%;
     min-height: 40px;
     font-size: 1em;
