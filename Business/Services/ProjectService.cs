@@ -13,16 +13,17 @@ public interface IProjectService
     Task<ProjectViewModel> CreateProjectAsync(ProjectViewModel model);
     Task DeleteProjectAsync(int id);
     Task<ProjectListViewModel> GetAllProjectsAsync();
+    Task<List<MemberViewModel>> GetAvailableMembersAsync();
     Task<ProjectViewModel> GetProjectByIdAsync(int id);
     Task UpdateProjectAsync(ProjectViewModel model);
 }
 
-public class ProjectService(AppDbContext context, UserManager<UserEntity> userManager, ProjectMapper projectMapper, MemberService memberService) : IProjectService
+public class ProjectService(AppDbContext context, UserManager<UserEntity> userManager, ProjectMapper projectMapper) : IProjectService
 {
     private readonly AppDbContext _context = context;
     private readonly UserManager<UserEntity> _userManager = userManager;
     private readonly ProjectMapper _projectMapper = projectMapper;
-    private readonly MemberService _memberService = memberService;
+
 
     public async Task<ProjectListViewModel> GetAllProjectsAsync()
     {
@@ -54,7 +55,7 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
             return null!;
         }
         var projectViewModel = await _projectMapper.MapToViewModel(project);
-        projectViewModel.AvailableMembers = await _memberService.GetAvailableMembersAsync(project);
+        projectViewModel.AvailableMembers = await GetAvailableMembersAsync();
         return projectViewModel;
 
     }
@@ -160,6 +161,20 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
 
     }
 
+    public async Task<List<MemberViewModel>> GetAvailableMembersAsync()
+    {
 
+        var users = await _userManager.Users.ToListAsync();
+
+        return users.Select(u => new MemberViewModel
+        {
+            Id = u.Id,
+            Name = u.FirstName + u.LastName,
+            Email = u.Email!,
+            Image = u.ProfileImage!
+        })
+        .ToList();
+       
+    }
 
 }
