@@ -1,3 +1,119 @@
-﻿<div class="project-list">
+﻿@model ProjectListViewModel
 
+<div class="project-list">
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveFilter == "all" ? "active" : "")"
+               asp-action="Projects" asp-route-filter="all">
+                ALL [@Model.AllProjects.Count]
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveFilter == "started" ? "active" : "")"
+               asp-action="Projects" asp-route-filter="started">
+                STARTED [@Model.StartedProjects.Count]
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveFilter == "completed" ? "active" : "")"
+               asp-action="Projects" asp-route-filter="completed">
+                COMPLETED [@Model.CompletedProjects.Count]
+            </a>
+        </li>
+    </ul>
+    <div class="tab-link">
+        @{
+            var projectsToShow = Model.ActiveFilter == "started" ?
+            Model.StartedProjects : Model.ActiveFilter == "completed" ? 
+            Model.CompletedProjects : Model.AllProjects;
+        }
+        @if (!projectsToShow.Any())
+        {
+            <div class="card">
+                <h3>No projects available.</h3>
+            
+            @if (Model.ActiveFilter == "all")
+            {
+                <p>Get started by creating a new project.</p>
+            }
+                else 
+                {
+                    <span >There are no @Model.ActiveFilter projects found.</span >
+                }
+                </div>
+        }
+        else
+        {
+            @foreach (var project in projectsToShow)
+            {
+                    <div class="project card" data-project-id="1">
+                        <div class="card-header">
+                            
+                                <div class="project-image">
+                                    <img asp-src="~/@project.Image" alt="Template project" />
+                                </div>
+                                <h6 class="project-name card-title">@project.ProjectName</h6>
+                                <span class="client-name">@project.ClientId</span>
+                                <div id="project-actions-container" class="card-action">
+                                    <button type="button" data-type="dropdown" data-target="project-dropdown" class="btn-action">
+                                        <i class="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    <div id="project-dropdown" class="dropdown">
+                                        <div class="dropdown-body">
+                                            <nav class="dropdown-actions">
+                                                <button data-type="modal" data-target="#editProjectModal" class="dropdown-action">
+                                                    <i class="fa-duotone fa-solid fa-pen-to-square"></i>
+                                                    <span>Edit</span>
+                                                </button>
+                                                <button class="dropdown-action" href="#">
+                                                    <i class="fa-duotone fa-solid fa-user-plus" style="--fa-primary-opacity: 0.4; --fa-secondary-opacity: 1;"></i>
+                                                    <span>Add Member</span>
+                                                </button>
+                                            </nav>
+                                            <div class="divider">
+                                                <nav class="dropdown-actions">
+                                                    <a class="dropdown-action remove" href="#">
+                                                        <i class="fa-duotone fa-solid fa-trash"></i>
+                                                        <span>Delete Project</span>
+                                                        <span>Edit</span>
+                                                    </a>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p>@project.Description</p>
+                            </div>
+                            <div class="card-footer">
+
+                                <div class="badge badge-danger">
+                                    <i class="fa-duotone fa-solid fa-clock"></i>
+                                    <span>@project.DaysLeft day@(project.DaysLeft != 1 ? "s" : "") left</span>
+                                </div>
+
+                                <div class="members">
+                                    @foreach (var member in project.ProjectMembers.Take(3))
+                                    {
+                                        <div class="user-image">
+                                    <img asp-src="~/@member.Image" alt="@member.Name" title="@member.Name" />
+                                        </div>
+                                    }
+                            @if (project.ProjectMembers.Count > 3)
+                                    {
+                                        <div class="user-image more-users">
+                                    <span>+@(project.ProjectMembers.Count() - 3)</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                    </div>
+                   
+            }
+        }
+           
+    </div>    
+      
 </div>

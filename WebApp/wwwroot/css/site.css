@@ -1175,7 +1175,7 @@ image-preview.square {
 
     /* dropdown inside notification container */
 
-    #notification-container .dropdown {
+    #notification-container.dropdown {
         min-width: 450px;
         width: 100%;
     }
@@ -1239,7 +1239,7 @@ image-preview.square {
     }
 
     /* account name styling */
-    #account-container .account-name {
+    .account-name {
         color: var(--account-name-text-color);
         border: 2px solid var(--account-name-border-color);
         background-color: var(--account-name-background-color);
