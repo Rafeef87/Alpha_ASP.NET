@@ -66,7 +66,7 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
         var project = new ProjectEntity
         {
             ProjectName = model.ProjectName,
-            ClientName = model.ClientId,
+            ClientName = model.ClientName,
             Status = "started", // Default status
             Description = model.Description,
             StartDate = model.StartDate,
@@ -108,7 +108,7 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
         }
         // Update project entity
         project.ProjectName = model.ProjectName;
-        project.ClientName = model.ClientId;
+        project.ClientName = model.ClientName;
         project.Status = model.Status;
         project.Description = model.Description;
         project.StartDate = model.StartDate;

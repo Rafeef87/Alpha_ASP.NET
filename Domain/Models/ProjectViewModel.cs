@@ -19,7 +19,7 @@ public class ProjectViewModel
     [Display(Name = "Client Name", Prompt = "Client Name")]
     [DataType(DataType.Text)]
     [Required(ErrorMessage = "Required")]
-    public string ClientId { get; set; } = null!;
+    public string ClientName { get; set; } = null!;
 
     [Display(Name = "Status")]
     public string Status { get; set; } = null!;

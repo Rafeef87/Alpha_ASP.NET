@@ -41,7 +41,7 @@ public class ProjectMapper
         {
             ProjectName = project.ProjectName,
             Description = project.Description,
-            ClientId = project.ClientName!,
+            ClientName = project.ClientName!,
             Status = project.Status,
             StartDate = project.StartDate,
             EndDate = project.EndDate,

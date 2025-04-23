@@ -372,7 +372,11 @@ h6 {
 .remove {
     color: var(--red) !important;
 }
-
+.no-results {
+    padding: 2rem;
+    text-align: center;
+  
+}
 /* Links */
 .nav-links {
     margin: 2rem 0;
@@ -1356,6 +1360,7 @@ image-preview.square {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 2rem;
+    display: none;
 }
 
 .member {

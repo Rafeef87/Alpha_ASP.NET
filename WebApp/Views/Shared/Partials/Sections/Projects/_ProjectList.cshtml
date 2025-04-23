@@ -30,18 +30,18 @@
         }
         @if (!projectsToShow.Any())
         {
-            <div class="card">
+            <div class="card no-results">
                 <h3>No projects available.</h3>
             
-            @if (Model.ActiveFilter == "all")
-            {
-                <p>Get started by creating a new project.</p>
-            }
+                @if (Model.ActiveFilter == "all")
+                {
+                    <p>Get started by creating a new project.</p>
+                }
                 else 
                 {
                     <span >There are no @Model.ActiveFilter projects found.</span >
                 }
-                </div>
+            </div>
         }
         else
         {
@@ -54,7 +54,7 @@
                                     <img asp-src="~/@project.Image" alt="Template project" />
                                 </div>
                                 <h6 class="project-name card-title">@project.ProjectName</h6>
-                                <span class="client-name">@project.ClientId</span>
+                                <span class="client-name">@project.ClientName</span>
                                 <div id="project-actions-container" class="card-action">
                                     <button type="button" data-type="dropdown" data-target="project-dropdown" class="btn-action">
                                         <i class="fa-solid fa-ellipsis"></i>
