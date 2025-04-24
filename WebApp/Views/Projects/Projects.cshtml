@@ -1,13 +1,16 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Projects";
 }
+
 <section id="projects">
     <header class="page-header">
         <h2>Projects</h2>
-        <button type="button" class="btn btn-add btn-blue">Add Project</button>
+        <button type="button" data-modal="true" data-target="#addProjectModal" class="btn btn-add btn-blue">Add Project</button>
     </header>
     
      <partial name="Partials/Sections/Projects/_projectList" />
   
 </section>
+
+@* <partial name="Partials/Sections/Projects/_AddProjectForm" />
+<partial name="Partials/Sections/Projects/_EditProjectForm" /> *@

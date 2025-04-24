@@ -1,4 +1,5 @@
 ﻿
+using System.Linq;
 using Business.Helpers;
 using Data.Contexts;
 using Data.Entities;
@@ -10,12 +11,13 @@ namespace Business.Services;
 
 public interface IProjectService
 {
-    Task<ProjectViewModel> CreateProjectAsync(ProjectViewModel model);
+    Task CreateProjectAsync(AddProjectViewModel model);
     Task DeleteProjectAsync(int id);
     Task<ProjectListViewModel> GetAllProjectsAsync();
     Task<List<MemberViewModel>> GetAvailableMembersAsync();
+    Task<List<MemberViewModel>> GetMembersByIdsAsync(List<string> memberIds);
     Task<ProjectViewModel> GetProjectByIdAsync(int id);
-    Task UpdateProjectAsync(ProjectViewModel model);
+    Task UpdateProjectAsync(EditProjectViewModel model);
 }
 
 public class ProjectService(AppDbContext context, UserManager<UserEntity> userManager, ProjectMapper projectMapper) : IProjectService
@@ -60,46 +62,72 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
 
     }
 
-    public async Task<ProjectViewModel> CreateProjectAsync(ProjectViewModel model)
+    public async Task CreateProjectAsync(AddProjectViewModel model)
     {
-        // Create project entity
+        // Save the uploaded image to a file path or convert it to a string representation
+        string? projectImagePath = null;
+        if (model.Image != null)
+        {
+            var uploadsFolder = Path.Combine("wwwroot", "images", "projects");
+            Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.Image.CopyToAsync(fileStream);
+            }
+
+            projectImagePath = "/images/projects/" + uniqueFileName; // Store relative path
+        }
+
+        // Create project
         var project = new ProjectEntity
         {
             ProjectName = model.ProjectName,
-            ClientName = model.ClientName,
-            Status = "started", // Default status
+            ProjectImage = projectImagePath, // Assign the saved image path
             Description = model.Description,
+            ClientName = model.ClientName,
             StartDate = model.StartDate,
             EndDate = model.EndDate,
             Budget = model.Budget,
-            Created = DateTime.Now,
-            Updated = DateTime.Now
+            Status = "started",
         };
-        await _context.Projects.AddAsync(project);
+
+        _context.Projects.Add(project);
         await _context.SaveChangesAsync();
 
-
         // Add project members
-        if (model.SelectedMemberIds != null && model.SelectedMemberIds.Count > 0)
+        if (model.SelectedMemberIds != null && model.SelectedMemberIds.Any())
         {
             foreach (var memberId in model.SelectedMemberIds)
             {
-                var projectMember = new MemberEntity
+                _context.Members.Add(new MemberEntity
                 {
                     ProjectId = project.Id,
                     UserId = memberId
-                };
-                await _context.Members.AddAsync(projectMember);
+                });
             }
             await _context.SaveChangesAsync();
         }
-        return model;
-
-
     }
 
-    public async Task UpdateProjectAsync(ProjectViewModel model)
+    public async Task UpdateProjectAsync(EditProjectViewModel model)
     {
+        // Save the uploaded image to a file path or convert it to a string representation
+        string? projectImagePath = null;
+        if (model.Image != null)
+        {
+            var uploadsFolder = Path.Combine("wwwroot", "images", "projects");
+            Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.Image.CopyToAsync(fileStream);
+            }
+            projectImagePath = "/images/projects/" + uniqueFileName; // Store relative path
+        }
         var project = await _context.Projects
             .FindAsync(model.Id);
         if (project == null)
@@ -161,20 +189,35 @@ public class ProjectService(AppDbContext context, UserManager<UserEntity> userMa
 
     }
 
+
     public async Task<List<MemberViewModel>> GetAvailableMembersAsync()
     {
 
-        var users = await _userManager.Users.ToListAsync();
+        var users = await _context.Users
+             .Select(u => new MemberViewModel
+             {
+                 Id = u.Id,
+                 Name = u.FirstName + u.LastName,
+                 Email = u.Email!,
+                 Image = u.ProfileImage!
+             })
+       .ToListAsync();
 
-        return users.Select(u => new MemberViewModel
-        {
-            Id = u.Id,
-            Name = u.FirstName + u.LastName,
-            Email = u.Email!,
-            Image = u.ProfileImage!
-        })
-        .ToList();
-       
+        return users;
     }
 
+    public async Task<List<MemberViewModel>> GetMembersByIdsAsync(List<string> memberIds)
+    {
+        var members = await _context.Users
+            .Where(u => memberIds.Contains(u.Id))
+            .Select(u => new MemberViewModel
+            {
+                Id = u.Id,
+                Name = u.FirstName + u.LastName,
+                Email = u.Email!,
+                Image = u.ProfileImage!
+            })
+            .ToListAsync();
+        return members;
+    }
 }

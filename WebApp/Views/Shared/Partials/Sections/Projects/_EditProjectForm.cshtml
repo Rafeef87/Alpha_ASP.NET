@@ -1,14 +1,14 @@
-﻿@model AddProjectViewModel
+﻿@model EditProjectViewModel
 
-<div id="addProjectModal" class="modal">
+<div id="editProjectModal" class="modal">
     <div class="modal-content">
 
         <div class="modal-header">
-            <h3>Add Project</h3>
+            <h3>Edit Project</h3>
             <button type="button" class="btn-close" data-close="true"></button>
         </div>
 
-        <form novalidate method="post" asp-action="Add" asp-controller="Projects">
+        <form novalidate method="post" asp-action="Update" asp-controller="Projects">
             <div class="image-previewer">
                 <img src="" class="image-preview" alt="Project image." />
                 <input asp-for="Image" accept="image/*" class="hide" />
@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label asp-for="Description"></label>
                 <div class="field-group">
-                    <textarea asp-for="Description" ></textarea>
+                    <textarea asp-for="Description"></textarea>
                     <span asp-validation-for="Description"></span>
                 </div>
             </div>
@@ -47,51 +47,41 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="ProjectMembers" class="form-label">Project Members</label>
-                <div class="selected-members">
-                    @if (Model.ProjectMembers != null && Model.ProjectMembers.Any())
+                <label asp-for="SelectedMemberIds"></label>
+                <div class="field-group selected-members">
+                    @foreach (var member in Model.ProjectMembers)
                     {
-                        foreach (var member in Model.ProjectMembers)
-                        {
-                            <div class="selected-member" data-id="@member.Id">
-                                <span>@member.Name</span>
-                                <button type="button" class="btn-remove-member">×</button>
-                                <input type="hidden" name="SelectedMemberIds" value="@member.Id" />
-                            </div>
-                        }
+                        <div class="selected-member" data-id="@member.Id">
+                            <span>@member.Name</span>
+                            <button type="button" class="btn btn-remove-member">×</button>
+                            <input type="hidden" name="SelectedMemberIds" value="@member.Id" />
+                        </div>
                     }
-                    <div class="search-container">
-                        <input type="text" id="memberSearch" placeholder="Search members..." class="form-control form-control-sm" />
-                        <button type="button" id="btnShowMembers" class="btn btn-outline-secondary btn-sm">
-                            <i class="fa fa-chevron-down"></i>
+                    <div>
+                        <input type="text" id="memberSearch" placeholder="Search for members..." />
+                        <button type="button" class="btn btn-outline-secondary" id="btnShowMembers">
+                            <i class="bi bi-search"></i>
                         </button>
                     </div>
                 </div>
-
-                <div id="membersDropdown" class="members-dropdown">
-                    <div class="no-results">No members found.</div>
-                    @if (Model.AvailableMembers != null && Model.AvailableMembers.Any())
+                <div id="membersDropdown" class="members-list">
+                    @foreach (var member in Model.AvailableMembers)
                     {
-                        foreach (var member in Model.AvailableMembers)
-                        {
-                            <div class="member-item" data-id="@member.Id" data-name="@member.Name">
-                                <span>@member.Name</span>
-                            </div>
-                        }
+                        <div class="member-item" data-id="@member.Id" data-name="@member.Name">
+                            <img src="@member.Image" alt="@member.Name" />
+                            <span>@member.Name</span>
+                        </div>
                     }
-                    else
-                    {
-                        <div class="no-available-members">No available members to add.</div>
-                    }
+                    <div class="no-results">
+                        <h3>No members found.</h3>
+                    </div>
                 </div>
-                <span asp-validation-for="SelectedMemberIds" class="text-danger"></span>
             </div>
-
 
             <div class="form-group">
                 <label asp-for="Budget"></label>
                 <div class="field-group">
-                    <input asp-for="Budget"  type="number" min="0"/>
+                    <input asp-for="Budget" type="number" min="0" />
                     <span asp-validation-for="Budget">$</span>
                 </div>
             </div>
@@ -101,9 +91,10 @@
                     @ViewBag?.ErrorMessage
                 </div>
             }
-            <button type="submit" class="btn btn-submit btn-blue">Create</button>
+            <button type="submit" class="btn btn-submit btn-blue">Save</button>
         </form>
 
     </div>
 
 </div>
+
